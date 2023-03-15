@@ -1,0 +1,71 @@
+{
+  "name": "share-gpt",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/share-gpt/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@codeimpact/nx-browser-extension:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/packages/share-gpt/build",
+        "backgroundDir": "src/pages/background/index.ts",
+        "manifestVersion": 3
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@codeimpact/nx-browser-extension:build",
+      "defaultConfiguration": "development",
+      "options": {
+        "outputPath": "dist/packages/share-gpt/build",
+        "backgroundDir": "src/pages/background/index.ts",
+        "manifestVersion": 3,
+        "buildTarget": "test-test:build",
+        "watch": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "share-gpt:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "share-gpt:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "test": {
+      "executor": "@nrwl/vite:test",
+      "outputs": ["coverage/packages/share-gpt"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/share-gpt"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/share-gpt/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "package": {
+      "executor": "@codeimpact/nx-browser-extension:package",
+      "dependsOn": ["build"],
+      "options": {
+        "sourceDir": "dist/packages/share-gpt/build",
+        "artifactsDir": "dist/packages/share-gpt/package"
+      }
+    }
+  },
+  "tags": []
+}
